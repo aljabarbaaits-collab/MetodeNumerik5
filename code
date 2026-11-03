@@ -1,0 +1,62 @@
+import math
+
+def f(t):
+    """Fungsi pemakaian memori f(t)"""
+    return 40 * t - 300 - 400 * math.exp(-0.3 * t)
+
+def f_prime(t):
+    """Turunan pertama dari f(t)"""
+    return 40 + 120 * math.exp(-0.3 * t)
+
+def newton_raphson(t0, tol=0.0001):
+    """
+    Menyelesaikan f(t) = 0 menggunakan Metode Newton-Raphson.
+    - t0: Tebakan awal
+    - tol: Kriteria toleransi berhenti (selisih antar-iterasi < 0.0001)
+    """
+    print("=" * 80)
+    print(" HASIL ITERASI METODE NEWTON-RAPHSON (NIM GANJIL) ")
+    print("=" * 80)
+    print(f"{'n':^5} | {'tn':^12} | {'f(tn)':^14} | {'f\'(tn)':^12} | {'tn+1':^12} | {'Selisih (Δ)':^14}")
+    print("-" * 80)
+    
+    t_curr = t0
+    n = 0
+    
+    while True:
+        ft = f(t_curr)
+        ft_prime = f_prime(t_curr)
+        
+        # Hitung nilai t berikutnya
+        t_next = t_curr - (ft / ft_prime)
+        delta = abs(t_next - t_curr)
+        
+        # Tampilkan baris tabel dengan presisi 6 angka di belakang koma
+        print(f"{n:^5} | {t_curr:12.6f} | {ft:14.6f} | {ft_prime:12.6f} | {t_next:12.6f} | {delta:14.6f}")
+        
+        # Cek kriteria berhenti
+        if delta < tol:
+            break
+            
+        t_curr = t_next
+        n += 1
+        
+    print("=" * 80)
+    print(f"\n[KESIMPULAN]")
+    print(f"1. Akar persamaan diperoleh pada t ≈ {t_next:.6f} jam.")
+    
+    # Konversi jam ke jam, menit, dan detik
+    jam = int(t_next)
+    sisa_menit = (t_next - jam) * 60
+    menit = int(sisa_menit)
+    detik = round((sisa_menit - menit) * 60)
+    print(f"   (Atau sekitar {jam} jam {menit} menit {detik} detik setelah restart).")
+    
+    print("2. Rekomendasi Jadwal Restart:")
+    print("   Server Nusa Chat disarankan untuk di-restart otomatis setiap 8 jam sekali")
+    print("   agar memori tidak mencapai batas maksimum 1000 MB.")
+
+if __name__ == "__main__":
+    # Nilai awal t0 = 8 sesuai ketentuan NIM Ganjil
+    t_awal = 8.0
+    newton_raphson(t_awal)
